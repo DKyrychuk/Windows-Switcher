@@ -2,13 +2,56 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-                  Title="mui" 
-                  LogoData="F1 M 24.9015,43.0378L 25.0963,43.4298C 26.1685,49.5853 31.5377,54.2651 38,54.2651C 44.4623,54.2651 49.8315,49.5854 50.9037,43.4299L 51.0985,43.0379C 51.0985,40.7643 52.6921,39.2955 54.9656,39.2955C 56.9428,39.2955 58.1863,41.1792 58.5833,43.0379C 57.6384,52.7654 47.9756,61.75 38,61.75C 28.0244,61.75 18.3616,52.7654 17.4167,43.0378C 17.8137,41.1792 19.0572,39.2954 21.0344,39.2954C 23.3079,39.2954 24.9015,40.7643 24.9015,43.0378 Z M 26.7727,20.5833C 29.8731,20.5833 32.3864,23.0966 32.3864,26.197C 32.3864,29.2973 29.8731,31.8106 26.7727,31.8106C 23.6724,31.8106 21.1591,29.2973 21.1591,26.197C 21.1591,23.0966 23.6724,20.5833 26.7727,20.5833 Z M 49.2273,20.5833C 52.3276,20.5833 54.8409,23.0966 54.8409,26.197C 54.8409,29.2973 52.3276,31.8106 49.2273,31.8106C 46.127,31.8106 43.6136,29.2973 43.6136,26.197C 43.6136,23.0966 46.127,20.5833 49.2273,20.5833 Z"
-                  Style="{StaticResource BlankWindow}">
-    <ScrollViewer>
-        <StackPanel>
-            <TextBlock Text="MODERN UI FOR WPF" Style="{StaticResource Heading2}" />
-            <TextBlock Text="Your content here" />
-        </StackPanel>
-    </ScrollViewer>
+                  xmlns:multiSelect="clr-namespace:WindowsSwitcher"
+                  Title="WindowsSwitcher"
+                  Style="{StaticResource BlankWindow}"
+                  Height="400" Width="600"
+                  DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid HorizontalAlignment="Center">
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <PathGeometry x:Key="RefreshIconData">F1 M 57,40L 51,40L 51,28.25C 51,27.4647 50.0328,27 49.25,27L 35,27L 39,31L 46,31L 46,40L 40,40L 48.5,49M 26.75,49C 25.9672,49 25,48.5353 25,47.75L 25,36L 19,36L 27.5,27L 36,36L 30,36L 29.9343,44.9634L 36.3765,44.9634L 41,49L 26.75,49 Z</PathGeometry>
+                    </StackPanel.Resources>
+                    <Label Content="Select the applications to switch" VerticalContentAlignment="Center" />
+                    <mui:ModernButton EllipseDiameter="26" IconWidth="16" IconHeight="16" IconData="{StaticResource RefreshIconData}" BorderThickness="2" Command="{Binding RefreshCommand}" Margin="5,0,0,0" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0">
+                <Border BorderThickness="1" BorderBrush="{DynamicResource ButtonBackgroundPressed}">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <ListBox SelectionMode="Multiple" Margin="4,0,4,0"
+                                 Validation.ErrorTemplate="{x:Null}"
+                                 DisplayMemberPath="{Binding DisplayMemberPath}"
+                                 ItemsSource="{Binding AllProcessList}" 
+                                 multiSelect:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedProcessesList}"
+                                 IsEnabled="{Binding ListBoxIsEnabled}">
+                        </ListBox>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+            <StackPanel Grid.Row="2" Margin="4,4,0,0" Orientation="Horizontal">
+                <CheckBox Content="Show all" IsChecked="{Binding ShowAllProcesses}" IsEnabled="{Binding CheckBoxShowAllProcessesIsEnabled}" Command="{Binding RefreshCommand}"/>
+            </StackPanel>
+            <Grid Grid.Row="3" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Interval:" VerticalContentAlignment="Center" />
+                    <TextBox Width="50" Text="{Binding Interval}" Margin="4,0,0,0" />
+                    <Label Content="second(s)."  VerticalContentAlignment="Center" Margin="4,0,0,0" />
+                    <Button Content="{Binding ButtonStartStopContent}" Command="{Binding StartCommand}" Width="75" Margin="8,0,0,0" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
 </mui:ModernWindow>
